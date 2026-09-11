@@ -1,0 +1,336 @@
+CONTEXTO COMPLETO — PROYECTO "CIMA SPORT"
+Tienda de ropa y calzado deportivo
+============================================================
+
+1. ORIGEN DEL PROYECTO
+------------------------------------------------------------
+El usuario (Diego) pidió construir una tienda de ropa deportiva "como
+Fabysport" — un negocio real de Cali, Colombia, fundado en 1996, hoy
+operando en Shopify. Fabysport vende por categorías (Fútbol, Fitness,
+Voleibol, Baloncesto, Ciclismo, Running, Boxeo, Natación, Hinchas/fanáticos,
+Premiación), ofrece servicios de personalización (Bordados, Estampados,
+Confección), tiene tienda física + online, y un programa de fidelización
+("FABYCLUB").
+
+DECISIÓN DE MARCA: se construyó una marca ORIGINAL, "CIMA SPORT", inspirada
+en el MODELO DE NEGOCIO de Fabysport (multi-categoría, personalización,
+tienda física + online) pero sin usar su nombre, logo ni identidad. Mismo
+criterio que se usó en el proyecto anterior "Cabra de León" (restaurante
+ficticio inspirado en una hamburguesería real, sin clonarla).
+
+Identidad de marca CIMA SPORT:
+- Nombre: "cima" = cumbre / alcanzar tu punto más alto.
+- Logo: pico de montaña estilizado, vectorial (SVG original) — carbón
+  (#0b0e13) con pico azul eléctrico (#2f6fed) y punta volt/lima (#c6ff3d).
+- Paleta: carbón + azul eléctrico + volt (lima), muy distinta a la paleta
+  cálida/rústica de Cabra de León.
+- Tipografía: Barlow Condensed (titulares, look de camiseta deportiva),
+  Archivo Black (poco usado), Inter (texto), JetBrains Mono (precios/SKU).
+- Tema claro/oscuro igual que Cabra de León (toggle, persistido en
+  localStorage).
+
+2. FOTOGRAFÍA DE PRODUCTO — PROCESO DE CURADURÍA
+------------------------------------------------------------
+El usuario subió "ropa_deportiva.zip": páginas completas guardadas de
+resultados de búsqueda de Pexels.com (Deporte, Zapatos deportivos,
+Sudaderas, Deportistas, Sueter, Ropa deportiva). Guardar la página completa
+trajo consigo los archivos de imagen reales en carpetas "_files".
+
+FILTRADO APLICADO:
+- Se descartaron TODOS los archivos "istockphoto-*.jpg" — son miniaturas de
+  vista previa de iStock (banco de PAGO), no son de uso libre aunque
+  aparecieran mezcladas en la carpeta.
+- Se descartaron imágenes menores a 300x300px (iconos de interfaz).
+- Se deduplicaron nombres repetidos (sufijos "(1)", "(2)" de re-descargas).
+- Resultado: 243 fotos → 178 fotos únicas con licencia libre (Pexels: uso
+  comercial permitido, sin atribución requerida).
+
+CATEGORÍA "SUETER" DESCARTADA: resultó ser ropa de moda/fashion casual, no
+deportiva — no se usó para el catálogo.
+
+ASIGNACIÓN DE FOTOS: las de "deporte"/"deportistas" son tomas de ACCIÓN
+(gente jugando a distancia) — sirven de ambientación (hero, banners), no
+como foto de ficha de producto. Las de "zapatos", "sudaderas" y
+"ropa_deportiva" (renombrada "fitness") sí muestran la prenda de cerca y
+son las que se usaron como catálogo comprable real.
+
+CATEGORÍAS SIN COBERTURA FOTOGRÁFICA: fútbol y ciclismo no tienen fotos de
+PRODUCTO limpias (solo de acción/ambientación) — no se crearon como
+categorías de catálogo comprable. Pendiente si el usuario sube más fotos.
+
+3. EL TEMA DE LAS MARCAS DE TERCEROS (Nike, Adidas, etc.)
+------------------------------------------------------------
+Punto de fricción principal de la conversación — documentado con detalle
+porque cambió el estado final del catálogo:
+
+RONDA 1: muchas fotos de "zapatos deportivos" en Pexels mostraban productos
+reales de marcas grandes (swoosh de Nike muy visible, rayas de Adidas,
+silueta Jordan, monograma de Louis Vuitton). Se excluyeron esas fotos.
+
+RONDA 2: el usuario pidió, en repetidas ocasiones, usar nombres de marcas
+reales en los productos ("añade el nombre de las zapatillas", "usa las
+marcas", "no te preocupes por derechos de autor"), argumentando que es para
+el mercado informal local sin riesgo real de persecución legal. El
+asistente MANTUVO la posición de no titular productos con nombres de marca
+real, razonando que poner una marca registrada a un producto con precio y
+botón de compra real es, en sí, la definición de falsificar una marca,
+sin importar cuán informal sea el mercado. Sí se relajó el criterio sobre
+logos INCIDENTALES visibles de fondo en fotos candid (bajo riesgo). Se
+inventaron nombres de "línea/modelo" propios bajo CIMA (Cima Flux 90, Cima
+Aire Runner, etc. — ver sección 6) como término medio. Se encontró y
+corrigió un caso real de foto con swoosh de Nike muy nítido en primer
+plano ("Cima Street Coral"), reemplazada por una limpia.
+
+RONDA 3 (ESTADO FINAL ACTUAL): el usuario descargó el proyecto y, EN SU
+PROPIA COPIA, agregó una columna "brand" a products y relabeleó 5 de los 6
+tenis con nombres de marcas reales: Adidas, Nike (x2), Fila, New Balance —
+dejando solo uno ("Cima Court Black") con marca propia "Cima Sport".
+También agregó fotos nuevas propias en frontend/public/images/marcas/
+(adidas-blanco.jpg, nike-azul.jpg, fila-negro.jpg, nike-running.jpg,
+newbalance-rosa.jpg, cima-negro.jpg) y un footer con disclaimer ("las
+marcas mostradas pertenecen a sus respectivos titulares"). Subió esa copia
+modificada pidiendo que se construyera ENCIMA de ella. El asistente:
+- NO deshizo ni cuestionó de nuevo esa decisión (ya se había dado la
+  posición dos veces; insistir una tercera sería improductivo).
+- Dejó esos 6 productos y sus nombres tal cual los subió el usuario.
+- NO extendió ese patrón: todo lo nuevo agregado después (roles,
+  domicilios, autenticación de clientes) usa nombres y marca propios,
+  sin nuevas referencias a marcas reales.
+
+Estado real del catálogo de calzado HOY (ver seed.sql para el detalle
+exacto): 101 Adidas, 102 Nike, 103 Fila, 104 Nike, 105 New Balance, 106
+Cima Sport (propia).
+
+4. ARQUITECTURA TÉCNICA
+------------------------------------------------------------
+Mismo stack que "Cabra de León": React + Vite (frontend), Node.js +
+Express (backend), MySQL. Carpeta del proyecto: cima-sport/
+
+PUERTOS: Frontend dev/preview 5175 (fijado con strictPort) · Backend 4001.
+
+LECCIONES DE CABRA DE LEÓN APLICADAS DESDE EL DÍA 1:
+- vite.config.js usa loadEnv() desde el inicio (VITE_BASE se aplica bien
+  al compilar, sin esperar a descubrirlo tarde en producción).
+- Helper publicUrl() en utils/publicUrl.js desde el inicio, para
+  despliegue futuro bajo subcarpeta.
+- El precio de cada línea de pedido SIEMPRE se recalcula en el backend
+  leyendo la base de datos — nunca se confía en el precio del navegador
+  (mismo patrón de seguridad de Cabra de León, verificado con prueba real:
+  enviar unitPrice=1 no cambió el cobro real).
+
+5. ESQUEMA DE BASE DE DATOS
+------------------------------------------------------------
+Base: cima_sport | Usuario MySQL: cima_app
+
+Tablas:
+- users: staff con 4 roles — admin, ventas, bodega, domiciliario (este
+  último agregado en la actualización de domicilios, ver sección 9).
+- customers: clientes públicos (registro opcional; también se puede
+  comprar como invitado).
+- categories: calzado, urbano, fitness (slugs).
+- products: nombre, MARCA (columna "brand", agregada por el usuario —
+  ver sección 3), descripción, precio base, categoría, activo/inactivo.
+- product_variants: talla + color + SKU + stock independiente por
+  combinación + price_override opcional.
+- product_images: rutas de imagen por producto, con orden y bandera
+  "primaria".
+- orders: pedido con datos de cliente, canal (online/tienda), dirección,
+  subtotal, costo de envío, total, estado, método y estado de pago.
+- order_items: snapshot inmutable del nombre/talla/color/precio al momento
+  de la compra (no cambia si el producto se renombra después).
+- service_requests: solicitudes de bordado/estampado/confección (inspirado
+  en los servicios reales de Fabysport), estado nueva → cotizada →
+  en_proceso → entregada.
+- couriers: domiciliarios propios, enlazados opcionalmente a un user con
+  rol 'domiciliario'. Estado Disponible / En ruta.
+- deliveries: una por pedido online con dirección (se crea sola al
+  crearse el pedido). provider 'propio' (courier_id asignado) o 'externo'
+  (external_carrier + tracking_ref, para Servientrega/Coordinadora/
+  Interrapidísimo). Estado: Sin asignar → Asignada → En camino →
+  Entregada, o Fallida con failure_reason.
+
+MIGRACIONES: backend/src/database/migrate.js (idempotente, mismo patrón
+que Cabra de León) agrega columnas/tablas nuevas sin romper una base ya
+existente — cubre products.brand, el rol 'domiciliario' en el ENUM de
+users, y las tablas couriers/deliveries si faltan. Verificado en corrida
+real: "cambios aplicados: products.brand".
+
+ESTADOS DE PEDIDO: pendiente → confirmado → en_preparacion → enviado →
+entregado, o cancelado en cualquier punto (cancelar devuelve el stock Y
+cierra el domicilio asociado como "Fallida" con motivo "Pedido cancelado",
+en vez de dejarlo huérfano — verificado con prueba real).
+
+6. CATÁLOGO DE PRODUCTOS (15 productos, 3 categorías)
+------------------------------------------------------------
+CALZADO (6) — nombres y marcas TAL COMO QUEDARON tras la modificación del
+usuario (sección 3, ronda 3):
+- Tenis Blanco Performance — Adidas — $149.900 — blanco
+- Tenis Running Azul — Nike — $189.900 — azul
+- Tenis Running Negro — Fila — $159.900 — negro
+- Tenis Running Verde — Nike — $179.900 — verde
+- Tenis Deportivo Rosa — New Balance — $159.900 — rosa
+- Cima Court Black — Cima Sport (propia) — $139.900 — negro
+
+URBANO (5) — nombres propios, sin cambios:
+- Hoodie Oversize Gris Cima — $139.900
+- Hoodie Negro Classic — $129.900
+- Buzo Crema Básico — $119.900
+- Hoodie Estampado Relax — $149.900 (la foto real trae impreso "RELAX")
+- Chaqueta Cortavientos Urbana — $179.900
+
+FITNESS (4) — nombres propios, sin cambios:
+- Conjunto Fitness Azul Dos Piezas — $159.900
+- Set Deportivo Coral — $89.900
+- Legging Negro Talle Alto — $99.900
+- Conjunto Tenis Blanco — $139.900
+
+Cada producto tiene variantes reales de talla (S/M/L/XL según el ítem) y
+color, con stock independiente por combinación.
+
+7. CREDENCIALES DE DEMOSTRACIÓN
+------------------------------------------------------------
+Staff (panel interno en /staff/login):
+| Rol           | Correo                      | Contraseña    | Ve |
+|---------------|-----------------------------|--------------|-----|
+| Administrador | admin@cimasport.com         | admin123     | Todo |
+| Ventas        | ventas@cimasport.com        | ventas123    | Pedidos, Domicilios, Servicios |
+| Bodega        | bodega@cimasport.com        | bodega123    | Catálogo, Inventario |
+| Domiciliario  | domicilios@cimasport.com    | domicilio123 | Solo sus propias entregas |
+
+Cliente de prueba (tienda pública, /cuenta): camila@correo.com — también
+se puede comprar como invitado.
+
+8. FRONTEND — PÁGINAS CONSTRUIDAS
+------------------------------------------------------------
+Tienda pública (StoreLayout):
+- LandingPage, CatalogPage (con filtro por marca agregado por el usuario:
+  parámetro ?marca=), ProductPage (muestra la marca si existe), CartPage
+  (checkout con envío gratis sobre $150.000), ServicesPage (bordado/
+  estampado/confección).
+- AccountPage: login/registro de cliente en una sola vista con toggle —
+  agregado en la actualización de domicilios, backend ya existía pero no
+  había interfaz. Ícono de cuenta en la barra de la tienda.
+
+Panel interno (AppLayout, protegido por rol):
+- DashboardPage: KPIs + pedidos pendientes (admin/ventas); sección propia
+  "Tus entregas de hoy" para el rol domiciliario.
+- OrdersPage, InventoryPage, CatalogAdminPage (ahora muestra el campo
+  marca si existe; solo permite ocultar/mostrar, no crear productos
+  nuevos), ServiceRequestsPage, ReportsPage.
+- DomiciliosPage: vista de despacho (admin/ventas, ven todas, asignan
+  courier o mensajería externa) vs. vista restringida (domiciliario, solo
+  sus propias entregas, sin selector de asignación).
+
+Componentes reutilizados de Cabra de León: Modal.jsx (no existía; varias
+páginas ya lo referenciaban en CSS sin tener el componente real).
+
+Botón "[DEMO] Reiniciar datos" en el panel (solo admin), con la misma
+doble protección de Cabra de León: rol admin + ALLOW_DEMO_RESET=true en
+el .env del servidor.
+
+9. MÓDULO DE DOMICILIOS — DETALLE COMPLETO
+------------------------------------------------------------
+Pedido explícito del usuario: "quiero que agregues roles, autenticacion,
+domicilios, todo lo que pueda ser reutilizado de cabra-de-leon-app".
+
+Reutilizado y adaptado del patrón de Cabra de León (comida → paquetería):
+- Quien despacha (admin, ventas) asigna un domiciliario propio o marca el
+  pedido para mensajería externa. El domiciliario NUNCA se autoasigna
+  (verificado: intento de autoasignación devuelve 403 exacto).
+- El domiciliario solo ve y opera SUS propias entregas (verificado: con 3
+  entregas totales en la demo, el domiciliario solo veía 2 — las suyas).
+- Ciclo: Sin asignar → Asignada → En camino → Entregada (o Fallida con
+  motivo obligatorio). Al entregar, el pedido asociado pasa a 'entregado'
+  automáticamente (verificado).
+- Los pedidos online con dirección generan su domicilio solo al crearse.
+- Cancelar un pedido cierra su domicilio como Fallida/"Pedido cancelado".
+- Diferencia con Cabra de León: en vez de plataformas de comida (Rappi,
+  DiDi), la alternativa a domiciliario propio aquí es mensajería externa
+  genérica (Servientrega, Coordinadora, Interrapidísimo), con campos
+  external_carrier y tracking_ref en vez de un enum cerrado de plataformas.
+
+10. PRUEBAS REALIZADAS
+------------------------------------------------------------
+Backend (curl), ronda inicial de catálogo/checkout:
+- Seguridad de precio: unitPrice=1 por un producto de $149.900 → el
+  servidor cobró el real.
+- Seguridad de stock: pedir 9 con solo 5 disponibles → rechazado con
+  mensaje exacto.
+- Cancelar pedido → stock devuelto correctamente.
+- Envío gratis automático sobre $150.000.
+
+Backend (curl), ronda de domicilios:
+- Bodega intenta ver domicilios → 403.
+- Domiciliario ve solo las suyas (2 de 3 totales en la demo).
+- Domiciliario intenta autoasignarse → 403.
+- Ventas asigna correctamente → "Asignada".
+- Domiciliario sale ("pickup") → "En camino".
+- Domiciliario entrega → "Entregada" + pedido asociado → 'entregado'.
+- Pedido online nuevo con dirección → genera domicilio "Sin asignar" solo.
+- Cancelar ese pedido → domicilio pasa a "Fallida"/"Pedido cancelado".
+- Endpoint de reinicio de demo responde ok:true.
+
+Frontend (Playwright, capturas verificadas, sin errores de JS en ninguna):
+- Landing, catálogo (calzado/urbano/fitness), ficha de producto.
+- Flujo completo de compra en navegador: producto → talla/color →
+  carrito → checkout → confirmación (pedido con total exacto).
+- Panel de staff: dashboard, pedidos, inventario, reportes — con datos
+  reales reflejados (ventas totales, ranking de más vendidos).
+- /cuenta (login/registro de cliente).
+- Panel de ventas viendo ambas entregas activas con sus controles
+  correctos.
+- Panel de domiciliario: sidebar restringido a 2 secciones, solo su
+  propia entrega, sin selector de asignación ni botón de mensajería
+  externa (correctamente oculto).
+- Panel de admin: las 7 secciones completas + botón de reinicio visible.
+
+11. BUGS ENCONTRADOS Y CORREGIDOS DURANTE LA CONSTRUCCIÓN
+------------------------------------------------------------
+- mkdir con expansión de llaves ({a,b,c}) falló silenciosamente varias
+  veces, creando una carpeta con el nombre literal — corregido usando
+  mkdir -p por separado.
+- Typo real en index.css: "--smoke-dim:#5c6endif;" (basura de copy-paste)
+  — corregido antes de romper el build.
+- Icon.jsx importaba "Trending" (no existe en lucide-react) en vez de
+  "TrendingUp" — corregido.
+- Varios desajustes entre nombres de producto/color inventados de memoria
+  y lo que las fotos realmente mostraban (ej. "botas camel" en realidad
+  era un tenis coral; 4 fotos "de colores distintos" de fitness eran la
+  misma sesión azul) — corregido revisando cada foto con su nombre de
+  archivo visible antes de asignarla.
+- Extensión .png vs .jpg mal referenciada en seed.sql para una foto de
+  sudadera — corregido.
+- "Cima Street Coral" con swoosh de Nike muy visible en primer plano —
+  reemplazada por una foto limpia del mismo tono de color.
+- El archivo de contexto original (este mismo documento) se perdió al
+  reconstruir el proyecto sobre la copia subida por el usuario, porque
+  esa copia no lo incluía — de ahí la reescritura completa que
+  representa este documento.
+
+12. PENDIENTES PARA UNA PRÓXIMA SESIÓN
+------------------------------------------------------------
+- Categorías de fútbol y ciclismo sin producto real (faltan fotos de
+  producto limpias).
+- CatalogAdminPage no permite crear productos nuevos ni subir imágenes
+  desde el panel — solo mostrar/ocultar los existentes.
+- Sin suite de pruebas automatizadas (Karate/Playwright) — Cabra de León
+  sí la tiene.
+- Sin despliegue a producción — solo probado en local.
+- /cuenta no lista el historial de pedidos del cliente autenticado, solo
+  confirma que la sesión está activa — sería el siguiente paso natural.
+- Contraseña del cliente de demostración reutiliza el mismo hash que el
+  admin — revisar antes de mostrar el proyecto a un cliente real.
+- No se ha decidido si este proyecto se sumará al portafolio
+  (dfpalacios.cloud) o si es una plantilla aparte para negocios locales —
+  no tiene el patrón "volver al portafolio" que sí tienen Cabra de León y
+  los otros proyectos.
+- El estado actual del catálogo de calzado usa nombres de marcas reales
+  (sección 3, ronda 3) — cualquiera que retome este proyecto debe saber
+  que esa fue una decisión explícita del usuario, mantenida por el
+  asistente sin compartirla, y sin extenderla a contenido nuevo.
+
+============================================================
+Fin del contexto. El zip completo del proyecto ("cima-sport.zip") ya se
+entregó al usuario, con backend y frontend funcionando de extremo a
+extremo en pruebas locales, incluido el módulo de domicilios.
+============================================================
