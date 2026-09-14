@@ -68,7 +68,7 @@ INSERT INTO accounts (id, full_name, email, password_hash, phone) VALUES
 (4,'Kevin Marín',      'domicilios@cimasport.com', '$2a$10$VOt8b53vaYQtMoZFFPXSeuj/clpOKD1ZT03GI1XDMl2bRaPUek.dy','3154445566'),
 (5,'Camila Vargas',    'camila@correo.com',        '$2a$10$5DED50JEocBVx4RtTgQB3.kfz2q5ISJipWaXcFyhj8YoYqIUl.nwO','3157894561');
 
--- Camila es solo clienta. Santiago además de asesor compra en la tienda:
+-- Camila solo es cliente. Santiago además de asesor compra en la tienda:
 -- una misma identidad con perfil de cliente Y vínculo laboral.
 INSERT INTO customer_profiles (account_id, default_address, city) VALUES
 (5,'Cra 45 #12-30','Cali'),

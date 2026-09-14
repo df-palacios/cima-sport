@@ -17,11 +17,11 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
  * puerta; lo que cambia es qué permisos trae y, por lo tanto, qué ve.
  */
 const CUENTAS_PRUEBA = [
-  { email: 'admin@cimasport.com',      pass: 'admin123',     rol: 'Administradora',   ve: 'Todo el panel, incluido el equipo' },
+  { email: 'admin@cimasport.com',      pass: 'admin123',     rol: 'Administrador',    ve: 'Todo el panel, incluido el equipo' },
   { email: 'asesor@cimasport.com',     pass: 'asesor123',    rol: 'Asesor + domiciliario', ve: 'Pedidos, servicios y domicilios' },
-  { email: 'bodega@cimasport.com',     pass: 'bodega123',    rol: 'Bodeguera',        ve: 'Catálogo e inventario' },
+  { email: 'bodega@cimasport.com',     pass: 'bodega123',    rol: 'Bodeguero',        ve: 'Catálogo e inventario' },
   { email: 'domicilios@cimasport.com', pass: 'domicilio123', rol: 'Domiciliario',     ve: 'Solo sus propias entregas' },
-  { email: 'camila@correo.com',        pass: 'cliente123',   rol: 'Clienta',          ve: 'Solo la tienda, sin panel' },
+  { email: 'camila@correo.com',        pass: 'cliente123',   rol: 'Cliente',           ve: 'Solo la tienda, sin panel' },
 ];
 
 /**

@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext.jsx';
 import { VIEWS, viewsFor } from '../config.js';
 import Icon from '../components/Icon.jsx';
 import { publicUrl } from '../utils/publicUrl.js';
+import { PORTFOLIO_URL } from '../config/links.js';
 import { useTheme } from '../context/ThemeContext.jsx';
 import { useToast } from '../context/ToastContext.jsx';
 import { api } from '../api.js';
@@ -79,6 +80,9 @@ export default function AppLayout() {
               <Icon name="refresh" /><span>{reiniciando ? 'Reiniciando…' : '[DEMO] Reiniciar datos'}</span>
             </button>
           )}
+          <a className="side__item" href={PORTFOLIO_URL} data-testid="link-portafolio">
+            <Icon name="arrowLeft" /><span>Volver al portafolio</span>
+          </a>
           <button className="side__item" onClick={handleLogout} data-testid="btn-logout">
             <Icon name="logout" /><span>Cerrar sesión</span>
           </button>

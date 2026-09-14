@@ -10,7 +10,7 @@ function readJSON(key) {
 /**
  * Una sola sesión para todos. Antes había dos (staff y cliente) sobre dos
  * tablas separadas, lo que impedía que una misma persona fuera empleada y
- * clienta a la vez. Ahora la cuenta es una, y lo que cambia es qué permisos
+ * cliente a la vez. Ahora la cuenta es una, y lo que cambia es qué permisos
  * trae.
  */
 export function AuthProvider({ children }) {

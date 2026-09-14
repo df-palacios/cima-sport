@@ -222,7 +222,7 @@ dice la acción concreta ("Entrar a mi cuenta", "Crear mi cuenta").
 El modelo anterior tenía dos tablas sueltas (`users` para el staff con el
 cargo escrito en un ENUM, y `customers` para la tienda). Eso obligaba a tocar
 código para crear un cargo nuevo, e impedía que una misma persona fuera
-clienta y empleada a la vez — algo normal en un negocio pequeño, donde el
+cliente y empleado a la vez — algo normal en un negocio pequeño, donde el
 asesor también compra.
 
 **Modelo actual:**
@@ -272,7 +272,7 @@ Cada tarjeta dice qué verá esa cuenta, para elegir con criterio:
 | asesor@cimasport.com | asesor123 | Asesor de tienda + Domiciliario | Pedidos, servicios y domicilios |
 | bodega@cimasport.com | bodega123 | Bodeguero | Catálogo e inventario |
 | domicilios@cimasport.com | domicilio123 | Domiciliario | Solo sus propias entregas |
-| camila@correo.com | cliente123 | (solo clienta) | Solo la tienda, sin panel |
+| camila@correo.com | cliente123 | (solo cliente) | Solo la tienda, sin panel |
 
 Las contraseñas son simples a propósito: son de demostración. En una tienda
 real se cambian y se pone `ALLOW_DEMO_RESET=false`.
@@ -346,3 +346,41 @@ Técnicamente, el pedido guarda `account_id` cuando se compra con sesión
 iniciada y `NULL` como invitado. El endpoint `/api/orders/mine` saca el id
 **del token**, nunca de la petición, así que nadie puede consultar pedidos
 ajenos.
+
+
+## Pruebas automatizadas
+
+Dos suites, con los mismos nombres y estructura que en Cabra de León.
+
+### API — Karate DSL (42 escenarios)
+
+```bash
+cd tests/api-karate
+java -jar karate.jar features
+```
+
+Requiere el backend corriendo en el 4001 y la base recién sembrada
+(`npm run db:setup`). Cubre autenticación y reglas de contraseña, la matriz
+de permisos por cargo, el ciclo completo de un domicilio, la seguridad del
+checkout (precio manipulado y stock) y la caja con IVA, vuelto y arqueo.
+
+### Interfaz — Playwright (33 pruebas × 2 formatos)
+
+```bash
+cd tests/e2e-playwright
+npm install
+npx playwright test                     # escritorio y móvil
+npx playwright test --project=movil     # solo móvil
+```
+
+Requiere backend y frontend levantados. Se ejecuta en dos formatos —
+escritorio y Pixel 7 — porque el panel cambia de barra lateral a cajón en
+móvil y esa diferencia hay que probarla. Con `PW_CHROMIUM_PATH` se puede
+reusar un Chromium ya instalado.
+
+## Volver al portafolio
+
+La tienda muestra una franja superior con el enlace, y el panel interno lo
+tiene en la barra lateral. Si se llegó desde el portafolio, el enlace hace
+un paso atrás en el historial en vez de recargar. La URL se deduce del host
+(en local, el 5173) y se puede forzar con `VITE_PORTFOLIO_URL`.

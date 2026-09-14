@@ -5,6 +5,7 @@ import { useCart } from '../context/CartContext.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 import { useSound } from '../context/SoundContext.jsx';
 import { publicUrl } from '../utils/publicUrl.js';
+import { PORTFOLIO_URL } from '../config/links.js';
 import Icon from '../components/Icon.jsx';
 
 const LINKS = [
@@ -58,8 +59,28 @@ export default function StoreLayout() {
     setOpen(false);
   }
 
+  // Si se llegó desde el portafolio, volver es un paso atrás en el historial:
+  // instantáneo y sin depender de que el portafolio esté levantado.
+  function volverAlPortafolio(e) {
+    try {
+      const vengoDeAhi = document.referrer &&
+        new URL(document.referrer).origin === new URL(PORTFOLIO_URL).origin;
+      if (vengoDeAhi && window.history.length > 1) {
+        e.preventDefault();
+        window.history.back();
+      }
+    } catch { /* si la URL no parsea, se sigue el enlace normal */ }
+  }
+
   return (
     <>
+      <div className="demo-bar">
+        <a href={PORTFOLIO_URL} onClick={volverAlPortafolio} data-testid="link-portafolio">
+          <Icon name="arrowLeft" size={14} />
+          <span>Volver al portafolio</span>
+        </a>
+        <span className="demo-bar__tag">Proyecto de demostración</span>
+      </div>
       <header className={`nav${scrolled ? ' nav--scrolled' : ''}`}>
         <div className="wrap nav__bar">
           <Link to="/" className="nav__brand" onClick={() => play('tap')}>
