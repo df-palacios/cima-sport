@@ -384,3 +384,48 @@ La tienda muestra una franja superior con el enlace, y el panel interno lo
 tiene en la barra lateral. Si se llegó desde el portafolio, el enlace hace
 un paso atrás en el historial en vez de recargar. La URL se deduce del host
 (en local, el 5173) y se puede forzar con `VITE_PORTFOLIO_URL`.
+
+
+## Auditoría de clases huérfanas (post-rediseño)
+
+El rediseño visual completo dejó 39 clases CSS referenciadas en el código
+sin ninguna regla que las definiera — el navegador simplemente las ignoraba,
+así que esos bloques se veían sin ningún estilo: sin tarjeta, sin espaciado,
+sin color. Los más graves:
+
+- **Todo el panel interno en móvil** (barra superior, menú hamburguesa,
+  cajón) — nadie lo había probado en un teléfono real desde el rediseño.
+- El catálogo de administración y el gráfico de "Más vendidos" en Reportes.
+- La página de Personalización (bordado/estampado/confección).
+
+Se auditó comparando cada `className` usado en los `.jsx` contra lo
+realmente definido en `index.css`, y se completaron las 39, con el mismo
+lenguaje visual del resto del sitio.
+
+## Otros ajustes de esta ronda
+
+- **Grid del catálogo en móvil real:** usaba un mínimo de 250px por
+  tarjeta, que en un teléfono no deja espacio ni para 2 columnas — cada
+  producto terminaba ocupando la pantalla completa. Ahora son 2 columnas
+  por defecto, 1 sola bajo ~360px.
+- **Pantalla de carga entre secciones:** usaba una variable de color del
+  sistema de diseño anterior que ya no existe (`var(--smoke)`), por lo que
+  el texto quedaba casi invisible. Reemplazada por una marca de página
+  animada, coherente con la identidad actual.
+- **Sonido real:** se reemplazó la síntesis hecha a mano por
+  [cuelume](https://github.com/Danilaa1/cuelume), el mismo paquete que usan
+  el portafolio y Rifa Navidad — cero dependencias, sintetizado con Web
+  Audio. El cue `toggle` (sobrio, dos golpes secos) se usa específicamente
+  para tema/sonido/menú.
+- **Barra fija de "Agregar al carrito" en móvil:** antes se mostraba
+  siempre junto con el botón normal de la ficha — redundante. Ahora solo
+  aparece cuando el botón normal ya salió de pantalla (`IntersectionObserver`).
+- **Fotos de producto:** reenfocadas y recodificadas a mayor calidad. Nota
+  honesta: las 43 fotos vienen fijas en 500px de ancho (el techo de las
+  miniaturas del banco de imágenes original) — esto corrige el
+  ablandamiento acumulado por varias recompresiones, pero no puede generar
+  detalle que la fuente nunca tuvo. Si en el futuro se consiguen las fotos
+  en mayor resolución, ahí sí habría un salto real de nitidez.
+
+Las 108 pruebas automatizadas (42 Karate + 66 Playwright) se corrieron de
+nuevo después de todos estos cambios — todas en verde.

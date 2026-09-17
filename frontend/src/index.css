@@ -302,6 +302,11 @@ h1,h2,h3{margin:0;font-family:'Archivo',system-ui,sans-serif;font-variation-sett
    tallas aparecen sin tener que abrir la ficha (patrón de retail real)
    ================================================================== */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:clamp(12px,2vw,24px);}
+/* En un teléfono real, minmax(250px,1fr) no deja espacio ni para 2 columnas
+   — cada tarjeta terminaba ocupando la pantalla completa. Dos columnas
+   angostas es el patrón esperado en cualquier catálogo de retail móvil. */
+@media(max-width:640px){.grid{grid-template-columns:repeat(2,1fr);gap:10px;}}
+@media(max-width:360px){.grid{grid-template-columns:1fr;}}
 .card{position:relative;display:flex;flex-direction:column;}
 .card__media{
   position:relative;aspect-ratio:3/4;border-radius:var(--r-md);overflow:hidden;
@@ -375,7 +380,10 @@ h1,h2,h3{margin:0;font-family:'Archivo',system-ui,sans-serif;font-variation-sett
    FICHA DE PRODUCTO — galería con miniaturas y cambio suave
    ================================================================== */
 .pdp{display:grid;grid-template-columns:1.15fr 1fr;gap:clamp(24px,4vw,56px);padding-block:28px 70px;align-items:start;}
-.pdp__gallery{position:sticky;top:88px;}
+/* Las fotos de producto son de banco gratuito a 500px de ancho real; sin
+   este tope, la columna de galería las estira a ~640px en pantallas
+   grandes y se nota. 560px reduce el estiramiento sin achicar la ficha. */
+.pdp__gallery{position:sticky;top:88px;max-width:560px;}
 .pdp__stage{position:relative;aspect-ratio:4/5;border-radius:var(--r-lg);overflow:hidden;background:var(--chalk-2);}
 .pdp__stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .45s var(--ease-out);}
 .pdp__stage img.on{opacity:1;}
@@ -417,12 +425,17 @@ h1,h2,h3{margin:0;font-family:'Archivo',system-ui,sans-serif;font-variation-sett
 /* Barra fija de compra en móvil: dentro del alcance del pulgar */
 .buy-bar{display:none;}
 @media(max-width:860px){
+  /* Oculta hasta que el botón normal de "Agregar" ya salió de pantalla —
+     mostrar los dos botones a la vez era redundante y comía espacio. */
   .buy-bar{
     display:flex;position:fixed;left:0;right:0;bottom:0;z-index:70;gap:12px;align-items:center;
     padding:12px var(--gutter) calc(12px + env(safe-area-inset-bottom));
     background:color-mix(in srgb,var(--surface) 94%,transparent);
     backdrop-filter:blur(14px);border-top:1.5px solid var(--line);
+    transform:translateY(100%);opacity:0;pointer-events:none;
+    transition:transform .28s var(--ease-out),opacity .22s;
   }
+  .buy-bar--show{transform:translateY(0);opacity:1;pointer-events:auto;}
   .buy-bar__price{display:flex;flex-direction:column;line-height:1.2;}
   .buy-bar__price small{font-size:11.5px;color:var(--steel);}
   .buy-bar__price b{font-size:18px;font-weight:700;}
@@ -669,3 +682,123 @@ h1,h2,h3{margin:0;font-family:'Archivo',system-ui,sans-serif;font-variation-sett
 .demo-bar a:hover{color:var(--blaze-deep);gap:10px;}
 .demo-bar__tag{color:var(--steel-dim);}
 @media(max-width:600px){.demo-bar{padding:7px 16px;font-size:11.5px;} .demo-bar__tag{display:none;}}
+
+/* ==================================================================
+   AUDITORÍA POST-REDISEÑO — clases que quedaron huérfanas cuando se
+   reescribió el sistema de diseño completo y nunca se les portó CSS.
+   ================================================================== */
+
+/* Alias: .mono quedó del sistema viejo, .num es el equivalente actual. */
+.mono{font-variant-numeric:tabular-nums;letter-spacing:-.01em;}
+.sec-label{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--steel);margin:26px 0 12px;}
+.sub{font-size:12.5px;color:var(--bad);margin-top:2px;}
+
+/* ---------- Personalización (bordado/estampado/confección) ---------- */
+.services-page{padding-block:26px 70px;}
+.service-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;}
+.service-card{
+  display:flex;flex-direction:column;align-items:flex-start;gap:9px;
+  padding:20px;text-align:left;border-radius:var(--r-md);
+  background:var(--surface);border:1.5px solid var(--line);
+  transition:border-color .18s,transform .16s var(--ease-spring),box-shadow .2s;
+}
+.service-card:hover{border-color:var(--line-strong);box-shadow:var(--shadow-sm);}
+.service-card:active{transform:scale(.98);}
+.service-card svg{color:var(--blaze-deep);}
+.service-card b{font-size:16px;font-weight:600;}
+.service-card span{color:var(--steel);font-size:13.5px;line-height:1.5;}
+.service-card.active{border-color:var(--blaze);background:var(--blaze-wash);}
+.reserve-form{display:flex;flex-direction:column;}
+
+/* ---------- Panel interno: barra superior de escritorio ---------- */
+.theme-toggle{
+  width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:var(--chalk-2);border:1.5px solid var(--line);color:var(--ink);
+  transition:border-color .18s,transform .16s var(--ease-spring);
+}
+.theme-toggle:hover{border-color:var(--ink);}
+.theme-toggle:active{transform:scale(.92);}
+.role-pill{
+  padding:7px 14px;border-radius:999px;font-size:12.5px;font-weight:600;
+  background:var(--chalk-2);border:1.5px solid var(--line);color:var(--ink-2);
+}
+.role-pill.active{background:var(--ink);color:var(--chalk);border-color:var(--ink);}
+.topbar__meta{color:var(--steel);font-size:13px;margin-top:3px;}
+.topbar__actions{display:flex;align-items:center;gap:10px;}
+
+/* ---------- Panel interno: barra y cajón móvil ---------- */
+.appbar{
+  display:none;align-items:center;justify-content:space-between;gap:12px;
+  padding:10px var(--gutter);background:var(--surface);border-bottom:1.5px solid var(--line);
+  position:sticky;top:0;z-index:65;
+}
+.appbar__id{display:flex;align-items:center;gap:10px;min-width:0;}
+.appbar__text{display:flex;flex-direction:column;min-width:0;}
+.appbar__text b{font-size:14.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.appbar__text small{font-size:11.5px;color:var(--steel);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.appbar__actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.appbar__menu-btn{
+  width:38px;height:38px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;
+  background:var(--chalk-2);border:1.5px solid var(--line);color:var(--ink);
+}
+.appdrawer__backdrop{position:fixed;inset:0;background:rgba(10,12,14,.4);backdrop-filter:blur(3px);z-index:63;animation:fadeIn .2s ease;}
+.appdrawer{display:none;}
+.appdrawer.open{
+  display:block;position:fixed;top:59px;left:0;right:0;bottom:0;z-index:64;
+  background:var(--surface);overflow-y:auto;animation:drawerDrop .22s var(--ease-out);
+  padding-bottom:calc(20px + env(safe-area-inset-bottom));
+}
+@keyframes drawerDrop{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:none;}}
+.appdrawer__head{padding:14px var(--gutter) 6px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--steel);}
+.appdrawer__links .side__item{border-radius:0;padding:15px var(--gutter);border-bottom:1px solid var(--line);font-size:16px;}
+.appdrawer__logout{
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  margin:14px var(--gutter);padding:13px;border-radius:var(--r-md);background:var(--bad-wash);color:var(--bad);
+}
+@media(max-width:900px){
+  .side,.topbar{display:none;}
+  .appbar{display:flex;}
+}
+
+/* ---------- Reportes: gráfico de barras ---------- */
+.bar-chart{display:flex;flex-direction:column;gap:12px;background:var(--surface);border:1.5px solid var(--line);border-radius:var(--r-md);padding:20px;}
+.bar-row{display:grid;grid-template-columns:150px 1fr 44px;align-items:center;gap:12px;font-size:13px;}
+.bar-row__label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink-2);}
+.bar-row__track{background:var(--chalk-2);border-radius:6px;height:9px;overflow:hidden;}
+.bar-row__fill{background:var(--blaze);height:100%;border-radius:6px;transition:width .5s var(--ease-out);}
+@media(max-width:560px){.bar-row{grid-template-columns:96px 1fr 36px;font-size:12px;}}
+
+/* ---------- Catálogo del panel (admin) — mismo lenguaje que .card ---------- */
+.product-card{
+  background:var(--surface);border:1.5px solid var(--line);border-radius:var(--r-md);
+  overflow:hidden;display:flex;flex-direction:column;
+}
+.product-card__img{position:relative;aspect-ratio:3/4;background:var(--chalk-2);}
+.product-card__img img{width:100%;height:100%;object-fit:cover;display:block;}
+.product-card__badge{position:absolute;top:10px;left:10px;}
+.product-card__body{padding:13px 15px 16px;display:flex;flex-direction:column;gap:3px;}
+.product-card__cat{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--steel);}
+.product-card__brand{font-size:12px;font-weight:600;color:var(--blaze-deep);}
+.product-card__name{font-size:15px;font-weight:600;}
+.product-card__price{font-size:14.5px;font-weight:700;margin-top:2px;}
+.admin-product-card{position:relative;}
+
+/* ---------- Inventario ---------- */
+.inv-product{margin-bottom:24px;}
+.inv-product > b{display:block;font-size:16px;font-weight:600;margin-bottom:9px;}
+
+/* ---------- KPI: ícono redondo ---------- */
+.kpi-i{
+  width:36px;height:36px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;
+  background:var(--blaze-wash);color:var(--blaze-deep);margin-bottom:11px;
+}
+
+/* ---------- Estado de carga entre secciones (React.lazy) ----------
+   Antes usaba var(--smoke), una variable del sistema de diseño anterior
+   que ya no existe — el texto quedaba prácticamente invisible. */
+.app-loading{min-height:60vh;display:flex;align-items:center;justify-content:center;}
+.app-loading__mark{
+  width:34px;height:34px;border-radius:9px;background:var(--ink);
+  animation:markPulse 1.1s ease-in-out infinite;
+}
+@keyframes markPulse{0%,100%{opacity:.15;transform:scale(.85);}50%{opacity:1;transform:scale(1);}}

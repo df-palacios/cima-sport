@@ -102,7 +102,7 @@ export default function StoreLayout() {
           <div className="nav__actions">
             <button
               className="icon-btn icon-btn--round"
-              onClick={() => { play('tap'); toggleSonido(); }}
+              onClick={() => { play('toggle'); toggleSonido(); }}
               aria-label={sonido ? 'Silenciar sonidos' : 'Activar sonidos'}
               title={sonido ? 'Silenciar sonidos' : 'Activar sonidos'}
             >
@@ -110,7 +110,7 @@ export default function StoreLayout() {
             </button>
             <button
               className="icon-btn icon-btn--round"
-              onClick={() => { play('tap'); toggleTheme(); }}
+              onClick={() => { play('toggle'); toggleTheme(); }}
               aria-label={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
               title={isDark ? 'Modo claro' : 'Modo oscuro'}
             >
@@ -120,7 +120,7 @@ export default function StoreLayout() {
             {/* Con leyenda, no solo icono: se lee qué hace antes de tocarlo */}
             <Link to="/cuenta" className="icon-btn" onClick={() => play('tap')}>
               <Icon name="user" size={17} />
-              <span className="only-wide">{customer ? customer.name.split(' ')[0] : 'Entrar'}</span>
+              <span className="only-wide">{customer ? customer.name.split(' ')[0] : 'Iniciar sesión'}</span>
             </Link>
 
             <Link to="/carrito" className="icon-btn" onClick={() => play('tap')}>
@@ -131,7 +131,7 @@ export default function StoreLayout() {
 
             <button
               className="icon-btn icon-btn--round nav__burger"
-              onClick={() => { play('tap'); setOpen((v) => !v); }}
+              onClick={() => { play('toggle'); setOpen((v) => !v); }}
               aria-expanded={open}
               aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
             >
@@ -160,11 +160,11 @@ export default function StoreLayout() {
                 </NavLink>
               </nav>
               <div className="drawer__foot">
-                <button className="btn btn--sm btn--ghost" onClick={() => { play('tap'); toggleSonido(); }}>
+                <button className="btn btn--sm btn--ghost" onClick={() => { play('toggle'); toggleSonido(); }}>
                   <Icon name={sonido ? 'volume' : 'volumeOff'} size={15} />
                   {sonido ? 'Sonido activado' : 'Sonido silenciado'}
                 </button>
-                <button className="btn btn--sm btn--ghost" onClick={() => { play('tap'); toggleTheme(); }}>
+                <button className="btn btn--sm btn--ghost" onClick={() => { play('toggle'); toggleTheme(); }}>
                   <Icon name={isDark ? 'sun' : 'moon'} size={15} />
                   {isDark ? 'Modo claro' : 'Modo oscuro'}
                 </button>

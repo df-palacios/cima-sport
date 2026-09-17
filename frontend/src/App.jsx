@@ -22,7 +22,11 @@ const TeamPage = lazy(() => import('./pages/app/TeamPage.jsx'));
 const CajaPage = lazy(() => import('./pages/app/CajaPage.jsx'));
 
 function AppLoading() {
-  return <div style={{ padding: 60, textAlign: 'center', color: 'var(--smoke)' }}>Cargando…</div>;
+  return (
+    <div className="app-loading">
+      <span className="app-loading__mark" />
+    </div>
+  );
 }
 
 function ProtectedStaffRoute({ children }) {

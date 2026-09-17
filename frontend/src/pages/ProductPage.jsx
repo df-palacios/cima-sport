@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { api, formatCOP } from '../api.js';
 import { publicUrl } from '../utils/publicUrl.js';
@@ -16,6 +16,10 @@ export default function ProductPage() {
   const [size, setSize] = useState(null);
   const [color, setColor] = useState(null);
   const [foto, setFoto] = useState(0);
+  // La barra fija de compra solo aparece cuando el botón normal ya se salió
+  // de pantalla — mostrarlas juntas es redundante y come espacio en móvil.
+  const [ctaOculto, setCtaOculto] = useState(false);
+  const ctaRef = useRef(null);
 
   useEffect(() => {
     setProduct(null); setFoto(0);
@@ -25,6 +29,13 @@ export default function ProductPage() {
       setSize(first?.size); setColor(first?.color);
     }).catch(() => toast('No pudimos cargar la prenda.'));
   }, [slug]);
+
+  useEffect(() => {
+    if (!product || !ctaRef.current) return;
+    const io = new IntersectionObserver(([entry]) => setCtaOculto(!entry.isIntersecting), { threshold: 0 });
+    io.observe(ctaRef.current);
+    return () => io.disconnect();
+  }, [product]);
 
   if (!product) {
     return <div className="wrap"><div className="pdp"><div className="pdp__stage" /><div /></div></div>;
@@ -129,7 +140,7 @@ export default function ProductPage() {
             <div className={`stock-line stock-line--${estado.c}`}><i />{estado.t}</div>
           )}
 
-          <button className="btn btn--primary btn--block" onClick={agregar}
+          <button ref={ctaRef} className="btn btn--primary btn--block" onClick={agregar}
                   disabled={!variant || variant.stock === 0} style={{ padding: '16px' }}>
             <Icon name="cart" size={17} /> Agregar al carrito
           </button>
@@ -145,7 +156,7 @@ export default function ProductPage() {
       </div>
 
       {/* En móvil el precio y el botón viven fijos abajo, al alcance del pulgar */}
-      <div className="buy-bar">
+      <div className={`buy-bar${ctaOculto ? ' buy-bar--show' : ''}`}>
         <div className="buy-bar__price">
           <small>{size ? `Talla ${size}` : 'Elige talla'}</small>
           <b className="num">{formatCOP(precio)}</b>

@@ -8,11 +8,13 @@ import { PORTFOLIO_URL } from '../config/links.js';
 import { useTheme } from '../context/ThemeContext.jsx';
 import { useToast } from '../context/ToastContext.jsx';
 import { api } from '../api.js';
+import { useSound } from '../context/SoundContext.jsx';
 
 function ThemeToggle() {
   const { isDark, toggleTheme } = useTheme();
+  const { play } = useSound();
   return (
-    <button className="theme-toggle" onClick={toggleTheme} aria-label="Cambiar tema">
+    <button className="theme-toggle" onClick={() => { play('toggle'); toggleTheme(); }} aria-label="Cambiar tema">
       <Icon name={isDark ? 'sun' : 'moon'} size={17} />
     </button>
   );
@@ -24,6 +26,7 @@ export default function AppLayout() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [reiniciando, setReiniciando] = useState(false);
   const toast = useToast();
+  const { play } = useSound();
   // El menú se arma con los permisos reales, no con un cargo fijo.
   const allowed = viewsFor(user?.permissions || []);
 
@@ -100,7 +103,7 @@ export default function AppLayout() {
           </div>
           <div className="appbar__actions">
             <ThemeToggle />
-            <button className="appbar__menu-btn" onClick={() => setMenuOpen((v) => !v)} aria-expanded={menuOpen}>
+            <button className="appbar__menu-btn" onClick={() => { play('toggle'); setMenuOpen((v) => !v); }} aria-expanded={menuOpen}>
               <Icon name={menuOpen ? 'x' : 'menu'} size={20} />
             </button>
           </div>
